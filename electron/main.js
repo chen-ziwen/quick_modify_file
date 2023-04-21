@@ -6,14 +6,14 @@
 // cross-env包 可以在运行script脚本的时候往环境变量中添加属性，后续就可以通过这个属性来判断项目是在开发环境还是生产环境。
 const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path');
-const { handleFileOpen } = require('./mainHandle/mainHandle');
+const { handleFileOpen, handleFileOpenFolder,readFileContent } = require('./mainHandle/mainHandle');
 
 const createWindow = () => {
     // 创建浏览窗口
     const win = new BrowserWindow({
         width:540,
         height: 405,
-        icon: path.join(__dirname,'..','./public/assets/dog.png'),
+        icon: path.join(__dirname,'..','./public/assets/dog.png'), // 开发路径
         autoHideMenuBar: true,
         resizable:false, // 设置未不可调整大小
         webPreferences: {
@@ -43,7 +43,9 @@ const createWindow = () => {
 // 和创建浏览器窗口的时候调用
 // 部分 API 在 ready 事件触发后才能使用。
 app.whenReady().then(() => {
-    ipcMain.handle('dialog:openFile',handleFileOpen)
+    ipcMain.handle('dialog:openFile', handleFileOpen);
+    ipcMain.handle('dialog:openFolder', handleFileOpenFolder);
+    ipcMain.handle('read-content', readFileContent);
     createWindow() // 创建窗口
     app.on('activate', () => {
         // 在 macOS 系统内, 如果没有已开启的应用窗口

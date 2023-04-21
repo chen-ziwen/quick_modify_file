@@ -15,5 +15,7 @@ window.addEventListener('DOMContentLoaded', () => {
 })
 
 contextBridge.exposeInMainWorld('electronAPI', {
-    openFile: () => ipcRenderer.invoke("dialog:openFile"),
+    openFolder: () => ipcRenderer.invoke("dialog:openFolder"), // 打开文件夹
+    openFile: () => ipcRenderer.invoke("dialog:openFile"), // 打开文件
+    readFileContent:(url)=> ipcRenderer.invoke('read-content',url) // 读取内容
 })
