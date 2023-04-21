@@ -6,23 +6,23 @@
 // cross-env包 可以在运行script脚本的时候往环境变量中添加属性，后续就可以通过这个属性来判断项目是在开发环境还是生产环境。
 const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path');
-const { handleFileOpen, handleFileOpenFolder,readFileContent } = require('./mainHandle/mainHandle');
+const { handleFileOpen, handleFileOpenFolder, readFileContent, handleGetFile } = require('./mainHandle/mainHandle');
 
 const createWindow = () => {
     // 创建浏览窗口
     const win = new BrowserWindow({
-        width:540,
+        width: 540,
         height: 405,
-        icon: path.join(__dirname,'..','./public/assets/dog.png'), // 开发路径
+        icon: path.join(__dirname, '..', './public/assets/dog.png'), // 开发路径
         autoHideMenuBar: true,
-        resizable:false, // 设置未不可调整大小
+        resizable: false, // 设置未不可调整大小
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
-            nodeIntegration:true,
+            nodeIntegration: true,
         }
     })
-    
-    console.log('url', path.join(__dirname,'..','./public/assets/vite.svg'))
+
+    console.log('url', path.join(__dirname, '..', './public/assets/vite.svg'))
 
     // 判断是开发环境还是生产环境，必须括号包裹否则会因为运算符权重问题导致判断失败 
     if (process.env.NODE_ENV === 'development') {
@@ -46,6 +46,7 @@ app.whenReady().then(() => {
     ipcMain.handle('dialog:openFile', handleFileOpen);
     ipcMain.handle('dialog:openFolder', handleFileOpenFolder);
     ipcMain.handle('read-content', readFileContent);
+    ipcMain.handle('get-file', handleGetFile);
     createWindow() // 创建窗口
     app.on('activate', () => {
         // 在 macOS 系统内, 如果没有已开启的应用窗口

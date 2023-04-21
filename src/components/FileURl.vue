@@ -21,6 +21,10 @@ async function readFileContent(url: string) {
   console.log('触发了', content);
   fileContent.value = content;
 }
+async function getFile(url: string) {
+  const result = await electronAPI.getFile(url);
+  console.log(result);
+}
 </script>
 
 <template>
@@ -31,6 +35,7 @@ async function readFileContent(url: string) {
     <button @click="openFile">选择文件</button>
     <button @click="openFolder">选择文件夹</button>
     <button @click="readFileContent(filePath)">点击读取文件内容</button>
+    <button @click="getFile(folderPath)">生成文件树</button>
   </div>
 </template>
 

@@ -1,5 +1,6 @@
 const { dialog } = require('electron');
 const fs = require('fs');
+const { handleGetFile } = require('./createFileTree')
 // 打开文件
 const handleFileOpen = async () => {
     const { canceled, filePaths } = await dialog.showOpenDialog({
@@ -16,7 +17,7 @@ const handleFileOpen = async () => {
 // 打开文件夹
 const handleFileOpenFolder = async () => {
     const { canceled, filePaths } = await dialog.showOpenDialog({
-        properties:['openDirectory']
+        properties: ['openDirectory']
     })
     if (canceled) {
         console.log('取消选择文件夹');
@@ -27,10 +28,10 @@ const handleFileOpenFolder = async () => {
 }
 
 // 读取文件的内容
-const readFileContent = (_,url) => {
+const readFileContent = (_, path) => {
     return new Promise((reslove, reject) => {
-        console.log('url---------->',url)
-        fs.readFile(url, 'utf-8', (err, data) => {
+        console.log('path---------->', path)
+        fs.readFile(path, 'utf-8', (err, data) => {
             if (err) {
                 reject(err)
             } else {
@@ -45,4 +46,5 @@ module.exports = {
     handleFileOpen,
     handleFileOpenFolder,
     readFileContent,
+    handleGetFile,
 }
