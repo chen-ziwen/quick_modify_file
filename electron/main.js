@@ -11,8 +11,8 @@ const { handleFileOpen, handleFileOpenFolder, readFileContent, handleGetFile } =
 const createWindow = () => {
     // 创建浏览窗口
     const win = new BrowserWindow({
-        width: 640,
-        height: 360,
+        width: 1280,
+        height: 720,
         icon: path.join(__dirname, '..', 'public/assets/dog.png'), // 开发路径
         autoHideMenuBar: true,
         resizable: false, // 设置未不可调整大小

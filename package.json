@@ -17,9 +17,9 @@
   },
   "build": {
     "appId": "com.your-website.your-app",
-    "productName": "ElectronApp",
-    "copyright": "Copyright © 2023 <your-name>",
-    "icon":"public/assets/dog.png",
+    "productName": "reslove_file",
+    "copyright": "Copyright © 2023 Chiko",
+    "icon": "public/assets/dog.png",
     "mac": {
       "category": "public.app-category.utilities"
     },
