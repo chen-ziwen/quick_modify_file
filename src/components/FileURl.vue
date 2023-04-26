@@ -4,7 +4,6 @@ defineProps<{ msg: string }>()
 const electronAPI = (window as any).electronAPI;
 const filePath = ref<string>('文件路径');
 const folderPath = ref<string>('文件夹路径');
-const fileExt = ref<string>('');
 const fileContent = ref<string>('');
 async function openFile() {
   const url = await electronAPI.openFile();

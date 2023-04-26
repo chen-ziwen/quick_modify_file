@@ -1,10 +1,10 @@
 // 生成文件树
 const fs = require('fs');
 const path = require('path');
-// 传入一个文件夹 生成一个文件树
+// 传入一个文件夹 利用递归生成一个文件树
 const readDirAll = (url, index) => {
     const data = { path: url, title: path.basename(url), type: 'directory', deep: index, extname: '', child: [] };
-    fs.readdirSync(url).map(file => {
+    fs.readdirSync(url).forEach(file => {
         const realUrl = path.join(url, file); // 拼接出绝对路径
         const isDirectory = fs.statSync(realUrl).isDirectory(); // 判断是否是文件夹
         if (isDirectory) {
