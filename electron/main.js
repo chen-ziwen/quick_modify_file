@@ -13,7 +13,7 @@ const createWindow = () => {
     const win = new BrowserWindow({
         width: 640,
         height: 360,
-        icon: path.join(__dirname, '..', './public/assets/dog.png'), // 开发路径
+        icon: path.join(__dirname, '..', 'public/assets/dog.png'), // 开发路径
         autoHideMenuBar: true,
         resizable: false, // 设置未不可调整大小
         webPreferences: {

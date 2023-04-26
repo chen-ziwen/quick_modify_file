@@ -29,13 +29,17 @@ async function getFile(url: string) {
 
 <template>
   <div class="file-url">
-    <p class="file-path-url">{{ filePath }}</p>
-    <p class="file-path-url">{{ folderPath }}</p>
-    <p class="file-path-url">{{ fileContent }}</p>
-    <button @click="openFile">选择文件</button>
-    <button @click="openFolder">选择文件夹</button>
-    <button @click="readFileContent(filePath)">点击读取文件内容</button>
-    <button @click="getFile(folderPath)">生成文件树</button>
+    <div class="file-box">
+      <p class="file-path-url">{{ filePath }}</p>
+      <p class="file-path-url">{{ fileContent }}</p>
+      <button @click="openFile">选择文件</button>
+      <button @click="readFileContent(filePath)">点击读取文件内容</button>
+    </div>
+    <div class="file-box">
+      <p class="file-path-url">{{ folderPath }}</p>
+      <button @click="openFolder">选择文件夹</button>
+      <button @click="getFile(folderPath)">生成文件树</button>
+    </div>
   </div>
 </template>
 
@@ -49,5 +53,11 @@ async function getFile(url: string) {
   height: 100%;
   background: url(/assets/images/cat.jpg) no-repeat;
   background-size: 100%;
+
+  .file-box {
+    button {
+      margin: 5px;
+    }
+  }
 }
 </style>
