@@ -17,7 +17,52 @@ const readDirAll = (url, index) => {
 }
 const handleGetFile = (_, url) => {
     const result = readDirAll(url, 0);
+    printFileTree(result);
+    printJSONTree(result);
     return result;
+}
+// 输出JSON格式目录树
+function printJSONTree (data) {
+    fs.writeFile('md.json', JSON.stringify(data), 'utf-8', (error)=>{
+        if (error) {
+            return console.log("写入失败");
+        }
+        return console.log("写入成功");
+  })
+}
+// 输出目录树
+function printFileTree (data) {
+    if (!data) return;
+    const result = resloveChild(data, 0);
+    fs.writeFile('md.txt', result,'utf-8', (error) => {
+        if (error) {
+            return console.log('写入失败');
+        }
+        return console.log('写入成功');
+    })
+}
+
+function resloveChild(data) {
+    let result = '';
+    result += `${addSpace(data.deep)}${data.title}\n`;
+    data.child.forEach(item => {
+        const nChild = item.child || [];
+        if (nChild.length > 0) {
+            result += resloveChild(item, item.deep);
+        } else {
+            result += `${addSpace(item.deep)}${item.title}\n`;
+        }
+    })
+    return result;
+}
+// 添加空格
+function addSpace(index) {
+    let str = '';
+    for (let i = 0; i < index; i++) {
+        str += '    ';
+    }
+    str += "|—— ";
+    return str;
 }
 
 module.exports = {
