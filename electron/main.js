@@ -22,7 +22,6 @@ const createWindow = () => {
         }
     })
 
-    console.log('url', path.join(__dirname, '..', './public/assets/vite.svg'))
 
     // 判断是开发环境还是生产环境，必须括号包裹否则会因为运算符权重问题导致判断失败 
     if (process.env.NODE_ENV === 'development') {

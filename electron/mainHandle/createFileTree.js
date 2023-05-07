@@ -1,4 +1,5 @@
 // 生成文件树
+const { dialog } = require('electron');
 const fs = require('fs');
 const path = require('path');
 // 传入一个文件夹 利用递归生成一个文件树
@@ -16,25 +17,28 @@ const readDirAll = (url, index) => {
     return data;
 }
 const handleGetFile = (_, url) => {
-    const result = readDirAll(url, 0);
-    printFileTree(result);
-    printJSONTree(result);
-    return result;
+    const data = readDirAll(url, 0);
+    if (!data) return;
+    const result = resloveChild(data, 0);
+    saveFileContent(result); // 生成文件树并打开下载文件夹
+    // printFileTree(result);
+    // printJSONTree(result);
+    return data;
 }
 // 输出JSON格式目录树
-function printJSONTree (data) {
-    fs.writeFile('md.json', JSON.stringify(data), 'utf-8', (error)=>{
+function printJSONTree(data) {
+    fs.writeFile('md.json', JSON.stringify(data), 'utf-8', (error) => {
         if (error) {
             return console.log("写入失败");
         }
         return console.log("写入成功");
-  })
+    })
 }
 // 输出目录树
-function printFileTree (data) {
+function printFileTree(data) {
     if (!data) return;
     const result = resloveChild(data, 0);
-    fs.writeFile('md.txt', result,'utf-8', (error) => {
+    fs.writeFile('md.txt', result, 'utf-8', (error) => {
         if (error) {
             return console.log('写入失败');
         }
@@ -63,6 +67,29 @@ function addSpace(index) {
     }
     str += "|—— ";
     return str;
+}
+
+// 下载文件，并保存到指定的位置
+const saveFilePath = (fileName, content) => {
+    fs.writeFile(fileName, content, 'utf-8', (error) => {
+        if (error) {
+            console.error(error, '写入失败');
+        } else {
+            console.log('文件已保存');
+        }
+    })
+}
+const saveFileContent = (content) => {
+    dialog.showSaveDialog({
+        filters: [{ name: 'text', extensions: ['txt'] }],
+        defaultPath: 'tree.txt', // 默认文件名
+    }).then(result => {
+        if (!result.canceled) {
+            saveFilePath(result.filePath, content)
+        }
+    }).catch(error => {
+        console.error(error);
+    });
 }
 
 module.exports = {

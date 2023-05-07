@@ -42,6 +42,8 @@ const readFileContent = (_, path) => {
 }
 
 
+
+
 module.exports = {
     handleFileOpen,
     handleFileOpenFolder,
