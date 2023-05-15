@@ -23,7 +23,7 @@ const handleGetFile = (_, url) => {
     saveFileContent(result); // 生成文件树并打开下载文件夹
     // printFileTree(result);
     // printJSONTree(result);
-    return data;
+    return result;
 }
 // 输出JSON格式目录树
 function printJSONTree(data) {
