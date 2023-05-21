@@ -7,7 +7,7 @@ import {
   CopyOutlined,
 }
   from '@ant-design/icons-vue';
-defineProps<{ msg: string }>()
+const props = defineProps<{ msg: string }>()
 const electronAPI = (window as any).electronAPI;
 const filePath = ref<string>('文件路径');
 const folderPath = ref<string>('文件夹路径');
