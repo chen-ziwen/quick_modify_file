@@ -28,6 +28,9 @@ export default {
         {
             path: 'capture',
             name: 'capture',
+            meta: {
+                title: '窗口捕获'
+            },
             component: () => import("@/view/Capture.vue"),
         },
     ]
