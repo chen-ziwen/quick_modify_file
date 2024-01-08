@@ -18,19 +18,17 @@ export default {
             component: () => import("@/view/FileReslove.vue"),
         },
         {
-            path: 'a',
-            name: 'a',
-            component: () => import("@/view/A.vue"),
+            path: 'tips',
+            name: 'tips',
+            meta: {
+                title: '使用说明'
+            },
+            component: () => import("@/view/Tips.vue"),
         },
         {
-            path: 'b',
-            name: 'b',
-            component: () => import("@/view/B.vue"),
-        },
-        {
-            path: 'c',
-            name: 'c',
-            component: () => import("@/view/C.vue"),
+            path: 'capture',
+            name: 'capture',
+            component: () => import("@/view/Capture.vue"),
         },
     ]
 };

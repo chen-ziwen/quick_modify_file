@@ -1,120 +1,160 @@
-<script setup lang="ts">
-import { ref } from 'vue';
-import {
-  ReloadOutlined,
-  FolderOpenOutlined,
-  DeleteOutlined,
-  CopyOutlined,
-}
-  from '@ant-design/icons-vue';
-const props = defineProps<{ msg: string }>()
-const electronAPI = (window as any).electronAPI;
-const filePath = ref<string>('文件路径');
-const folderPath = ref<string>('文件夹路径');
-const fileContent = ref<string>('');
-const choices = ref('tree');
-async function openFile() {
-  const url = await electronAPI.openFile();
-  filePath.value = url;
-  console.log(url);
-}
-async function openFolder() {
-  const url = await electronAPI.openFolder();
-  folderPath.value = url;
-  console.log(url);
-}
-async function readFileContent(url: string) {
-  const content = await electronAPI.readFileContent(url);
-  console.log('触发了', content);
-  fileContent.value = content;
-}
-async function getFile(url: string) {
-  const result = await electronAPI.getFile(url);
-  console.log(result);
-}
-</script>
-
 <template>
-  <div class="file-url">
-    <!-- <div class="file-box">
-      <p class="file-path-url">{{ filePath }}</p>
-      <p class="file-path-url">{{ fileContent }}</p>
-      <button @click="openFile">选择文件</button>
-      <button @click="readFileContent(filePath)">点击读取文件内容</button>
+  <div class="file-reslove">
+    <div class="file-message-show">
+      <a-collapse v-model:activeKey="activeKey">
+        <a-collapse-panel key="1" header="执行成功">
+          <FileMessage v-if="checkPath.suc.length > 0" :paths="checkPath.suc" type="success" text-color="green">
+          </FileMessage>
+          <span v-else>暂无 成功信息</span>
+        </a-collapse-panel>
+        <a-collapse-panel key="2" header="执行失败">
+          <FileMessage v-if="checkPath.err.length > 0" :paths="checkPath.err" type="fail" text-color="red"></FileMessage>
+          <span v-else>暂无 失败信息</span>
+        </a-collapse-panel>
+      </a-collapse>
     </div>
-    <div class="file-box">
-      <p class="file-path-url">{{ folderPath }}</p>
-      <button @click="openFolder">选择文件夹</button>
-      <button @click="getFile(folderPath)">生成文件树</button>
-    </div> -->
-    <header class="header-info">
-      <a-input-group compact class="input-group">
-        <a-select v-model:value="choices">
-          <a-select-option value="tree">树状图</a-select-option>
-          <a-select-option value="json">键值对</a-select-option>
-        </a-select>
-        <a-input v-model:value="filePath" class="input-size" placeholder="请选择文件夹">
-          <template #addonAfter>
-            <div class="icon-setting">
-              <folder-open-outlined class="icon" title="打开文件夹" />
-              <reload-outlined class="icon" title="重新加载" />
-              <delete-outlined class="icon" title="清空数据" />
-              <copy-outlined class="icon" title="复制到剪切板" />
-            </div>
-          </template>
-        </a-input>
-      </a-input-group>
-    </header>
-    <article class="create-txt">
-      <section></section>
-      <section></section>
-    </article>
-    <aside>
-
+    <aside class="file-side">
+      <a-form v-bind="layout">
+        <a-form-item label="资源路径">
+          <a-input-group compact>
+            <a-input v-model:value="form.remote" style="width: calc(100% - 90px)" placeholder="新主题的图片路径" />
+            <a-button type="primary" @click="useOpenRemoteFolder">打开</a-button>
+            <a-button type="primary" ghost @click="useCheckFolderName">检测</a-button>
+          </a-input-group>
+        </a-form-item>
+        <a-form-item label="主题名称">
+          <a-input v-model:value="form.theme" placeholder="新主题的键名(英文名)" />
+        </a-form-item>
+        <a-form-item label="项目路径">
+          <a-input-group compact>
+            <a-input v-model:value="form.local" style="width: calc(100% - 90px)" placeholder="咩播项目路径" />
+            <a-button type="primary" @click="useOpenLocalFolder">打开</a-button>
+            <a-button type="primary" ghost :disabled="checkPath.disabled" @click="useCopyFileResource">复制</a-button>
+          </a-input-group>
+        </a-form-item>
+      </a-form>
     </aside>
   </div>
 </template>
 
+<script setup lang="ts">
+import { reactive, ref, watch } from 'vue';
+import { message } from 'ant-design-vue';
+import FileMessage from './FileMessage.vue';
+defineProps<{ msg: string }>()
+const { openFolder, checkFolderName, copyFileResource } = window.electronAPI;
+
+const layout = {
+  labelCol: { span: 6 },
+  wrapperCol: { span: 18 },
+};
+
+const activeKey = ref<string[]>([]);
+const form = reactive({
+  theme: "",
+  remote: "",
+  local: "",
+});
+
+const checkPath = reactive({
+  suc: [] as { path: string, text: string }[],
+  err: [] as { path: string, text: string }[],
+  disabled: true,
+});
+
+watch(() => form.remote, () => {
+  checkPath.disabled = true;
+})
+
+async function useOpenFolder(text: string, callback: (path: string) => void) {
+  const info = await openFolder();
+  if (info.status) {
+    callback(info.path);
+  } else {
+    message.error(text);;
+  }
+}
+
+function useOpenLocalFolder() {
+  useOpenFolder("取消选择项目文件夹", (path: string) => {
+    form.local = path;
+  })
+}
+
+function useOpenRemoteFolder() {
+  useOpenFolder("取消选择资源文件夹", (path: string) => {
+    form.remote = path;
+  })
+}
+
+async function useCheckFolderName() {
+  if (form.remote == "") {
+    message.error("资源路径不能为空");
+    return;
+  }
+  try {
+    const { suc, err, disabled } = await checkFolderName(form.remote);
+    checkPath.suc = suc;
+    checkPath.err = err;
+    checkPath.disabled = disabled;
+    activeKey.value.splice(0, activeKey.value.length, "1", "2");
+    message.success("检测成功!");
+  } catch (err) {
+    message.error("资源路径不存在！");
+  }
+}
+
+async function useCopyFileResource() {
+  if (form.theme == "" || form.local == "" || form.remote == "") {
+    message.error("资源路径，主题名称，项目路径都不能为空！！！");
+    return;
+  }
+  try {
+    const { suc, err, disabled } = await copyFileResource({
+      theme: form.theme,
+      src: form.local,
+      destPath: form.remote
+    });
+    checkPath.suc = suc;
+    checkPath.err = err;
+    checkPath.disabled = disabled;
+    activeKey.value.splice(0, activeKey.value.length, "1", "2");
+    message.success("复制成功！");
+  } catch (e) {
+    message.error("复制失败！");
+  }
+}
+
+
+</script>
+
+
 <style scoped lang="scss">
-.file-url {
+.file-reslove {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   width: 100%;
   height: 100%;
 
-  .file-box {
-    button {
-      margin: 5px;
+  .file-message-show {
+    flex: 3;
+    padding: 15px;
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+      display: none;
     }
   }
 
-  .header-info {
-    width: 90%;
-    height: 120px;
-    box-shadow: 0 0 5px rgb(83, 83, 83);
-    margin-top: 20px;
-
-    .input-group {
-      display: flex;
-      padding: 15px;
-
-      .icon-setting {
-        .icon {
-          cursor: pointer;
-          padding: 0 5px;
-          margin: 0 10px;
-          color: #9C9FC0;
-        }
-      }
-    }
+  .file-side {
+    flex: 2;
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-left: 3px solid rgba(109, 129, 146, 0.8);
   }
 
-  .create-txt {
-    width: 90%;
-    flex-grow: 1;
-    margin: 30px 0;
-    box-shadow: 0 0 5px rgb(83, 83, 83);
+  :deep(.ant-btn) {
+    padding-left: 6px;
+    padding-right: 6px;
   }
 }
 </style>

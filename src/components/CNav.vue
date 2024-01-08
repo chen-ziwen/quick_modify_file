@@ -5,13 +5,10 @@
                 <RouterLink :to="{ name: 'file-reslove' }" active-class="active">文件处理</RouterLink>
             </li>
             <li>
-                <RouterLink :to="{ name: 'a' }" active-class="active">A</RouterLink>
+                <RouterLink :to="{ name: 'tips' }" active-class="active">使用说明</RouterLink>
             </li>
             <li>
-                <RouterLink :to="{ name: 'b' }" active-class="active">B</RouterLink>
-            </li>
-            <li>
-                <RouterLink :to="{ name: 'c' }" active-class="active">C</RouterLink>
+                <RouterLink :to="{ name: 'capture' }" active-class="active">视频捕获</RouterLink>
             </li>
         </ul>
     </nav>
