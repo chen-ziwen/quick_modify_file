@@ -29,7 +29,7 @@
           <a-input-group compact>
             <a-input v-model:value="form.local" style="width: calc(100% - 90px)" placeholder="咩播项目路径" />
             <a-button type="primary" @click="useOpenLocalFolder">打开</a-button>
-            <a-button type="primary" ghost :disabled="checkPath.disabled" @click="useCopyFileResource">复制</a-button>
+            <a-button type="primary" ghost @click="useCopyFileResource">复制</a-button>
           </a-input-group>
         </a-form-item>
       </a-form>
