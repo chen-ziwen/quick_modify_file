@@ -7,6 +7,6 @@
 `npm i`
 `npm start`
 ## 编译成软件
-`npm run build`
-`npm run electron:build`
+编译Vue: `npm run build`
+编译Vue同时编译Electron: `npm run electron:build`
 
