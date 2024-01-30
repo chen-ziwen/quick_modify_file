@@ -7,10 +7,14 @@
 ![mmexport1706621909331](https://github.com/chen-ziwen/resolve_file_path/assets/85820568/de70f207-4d2a-43b2-8b56-d23aeea3ba68)
 
 ## 运行
-`git clone 项目地址`
-`npm i`
-`npm start`
+```git
+$ git clone git@github.com:chen-ziwen/resolve_file_path.git`
+$ npm install
+$ npm start
+```
 ## 编译成软件
-编译Vue: `npm run build`
-编译Vue同时编译Electron: `npm run electron:build`
+```git
+$ npm run build // 编译Vue
+$ npm run electron:build // 编译Vue同时编译Electron
+```
 
