@@ -8,7 +8,7 @@
 
 ## 运行
 ```git
-$ git clone git@github.com:chen-ziwen/resolve_file_path.git`
+$ git clone git@github.com:chen-ziwen/quick_filename.git`
 $ npm install
 $ npm start
 ```
