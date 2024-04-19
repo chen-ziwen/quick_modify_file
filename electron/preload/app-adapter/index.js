@@ -1,6 +1,6 @@
 import { Driver } from "../module/Driver";
-import "../module";
 import { PreloadHandler } from "./handler";
+import "../module";
 
 
 class PreloadAppLication {

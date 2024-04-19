@@ -24,7 +24,7 @@ export class Driver {
         for (let key in this.mDriver) {
             const cls = new this.mDriver[key](handler);
             if (typeof cls.export == "function") {
-                ctx[key] = cls.export;
+                ctx[key] = cls.export();
             }
         }
         return ctx;

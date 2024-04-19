@@ -15,6 +15,14 @@ class Dialog extends PreloadCore {
         })
     }
 
+    export() {
+        return {
+            on: this.on.bind(this),
+            open: this.on.bind(this),
+            result: this.on.bind(this)
+        }
+    }
+
     on(fn) {
         this.mHandler.push(fn);
     }
